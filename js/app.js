@@ -1,6 +1,6 @@
 import { load, save, uid, normalize, empty, STORAGE_KEY } from './store.js';
 import * as T from './time.js';
-import { haptic, hapticsOn, setHaptics } from './haptics.js';
+import { haptic, hapticsOn, setHaptics, isIOS } from './haptics.js';
 import * as Sync from './sync.js';
 import { timePicker, datePicker } from './wheel.js';
 import { dialSVG, timeline } from './dial.js';
@@ -1034,8 +1034,11 @@ function openSettings() {
         <span>Haptics</span>
         <input type="checkbox" switch id="s-haptics" ${hapticsOn() ? 'checked' : ''}>
       </label>
+      <button class="prow" id="s-test-haptic"><span>Test haptics</span><span class="pval">Tap</span></button>
     </div>
-    <p class="quiet-note">On iPhone, haptics need iOS 18 or newer.</p>
+    <p class="quiet-note">${isIOS
+      ? 'iPhones only allow a haptic when you tap something, so you’ll feel taps on buttons and wheel numbers, but not while spinning a wheel.'
+      : 'You’ll feel a tap on buttons and a tick for each step of a scroll wheel.'}</p>
 
     <h4 class="group-title">Backup</h4>
     <div class="group">
@@ -1047,6 +1050,10 @@ function openSettings() {
     $('#s-haptics', el).addEventListener('change', (e) => {
       setHaptics(e.target.checked);
       haptic('medium');
+    });
+    $('#s-test-haptic', el).addEventListener('click', () => {
+      haptic('heavy');
+      if (!hapticsOn()) toast('Turn on haptics first');
     });
     $('#s-export', el).addEventListener('click', exportBackup);
     const file = $('#s-file', el);

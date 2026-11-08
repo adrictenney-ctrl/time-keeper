@@ -1,7 +1,7 @@
 // Lets Time Keeper open without internet. Always tries the network first so
 // updates show up right away, and falls back to the saved copy when offline.
 
-const CACHE = 'time-keeper-v2';
+const CACHE = 'time-keeper-v3';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/app.js', './js/store.js', './js/time.js', './js/sync.js',

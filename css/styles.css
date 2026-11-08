@@ -546,6 +546,21 @@ input[type="checkbox"][switch], .prow.toggle input[type="checkbox"] {
 }
 .toast.show { transform: translate(-50%, 0); }
 
+/* ---------------- iPhone haptic tap overlay ---------------- */
+
+.haptic-overlay {
+  position: fixed; z-index: 2147483647;
+  opacity: 0; display: block;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+}
+.haptic-overlay input {
+  position: absolute; left: 0; top: 0;
+  width: 1px; height: 1px; margin: 0; opacity: 0;
+  pointer-events: none;
+}
+
 /* ---------------- view change ---------------- */
 
 #view > * { animation: rise 0.35s var(--ease) both; }

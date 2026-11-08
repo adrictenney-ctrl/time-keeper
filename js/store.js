@@ -1,4 +1,5 @@
 // Saves everything in this browser's localStorage.
+// Every shift and pay period has an `updatedAt` so copies on different devices can be merged.
 
 const KEY = 'timekeeper.v1';
 
@@ -7,9 +8,12 @@ export function empty() {
 }
 
 export function normalize(data) {
+  const fix = (r) => (r && typeof r === 'object' && r.id ? { updatedAt: 0, ...r } : null);
   return {
-    shifts: Array.isArray(data?.shifts) ? data.shifts : [],
-    payPeriods: Array.isArray(data?.payPeriods) ? data.payPeriods : [],
+    shifts: Array.isArray(data?.shifts)
+      ? data.shifts.map(fix).filter(Boolean).map((s) => (s.deleted ? s : { breaks: [], ...s }))
+      : [],
+    payPeriods: Array.isArray(data?.payPeriods) ? data.payPeriods.map(fix).filter(Boolean) : [],
     settings: data?.settings && typeof data.settings === 'object' ? data.settings : {},
   };
 }

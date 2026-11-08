@@ -71,6 +71,42 @@ export function fmtTime(ms) {
   return new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 }
 
+export function dayStartMs(key) {
+  return parseKey(key).getTime();
+}
+
+export function weekStart(key) {
+  const d = parseKey(key);
+  d.setDate(d.getDate() - d.getDay());
+  return dateKey(d.getTime());
+}
+
+export function fmtLongDate(key) {
+  return parseKey(key).toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+export function relDay(key) {
+  const today = dateKey(Date.now());
+  if (key === today) return 'Today';
+  if (key === addDays(today, -1)) return 'Yesterday';
+  return fmtDate(key);
+}
+
+// "HH:MM" -> "9:05 AM"
+export function fmtTimeStr(t) {
+  const [h, m] = t.split(':').map(Number);
+  return `${h % 12 === 0 ? 12 : h % 12}:${pad(m)} ${h >= 12 ? 'PM' : 'AM'}`;
+}
+
+export function hours2(ms) {
+  return Math.round(ms / 36000) / 100;
+}
+
+export function fmtReadout(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return { main: `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}`, sec: pad(s % 60) };
+}
+
 export function fmtDate(key, { weekday = true } = {}) {
   const d = parseKey(key);
   const opts = { month: 'short', day: 'numeric' };
